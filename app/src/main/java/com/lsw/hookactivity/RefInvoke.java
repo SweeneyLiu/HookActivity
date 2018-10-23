@@ -102,4 +102,14 @@ public class RefInvoke {
         return null;
     }
 
+    public static void setFieldObject(Class clazz, Object obj, String filedName, Object filedVaule) {
+        try {
+            Field field = clazz.getDeclaredField(filedName);
+            field.setAccessible(true);
+            field.set(obj, filedVaule);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

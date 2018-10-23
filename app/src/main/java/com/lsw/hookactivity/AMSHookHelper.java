@@ -1,5 +1,6 @@
 package com.lsw.hookactivity;
 
+import android.app.Instrumentation;
 import android.os.Handler;
 
 import java.lang.reflect.InvocationTargetException;
@@ -53,4 +54,19 @@ public class AMSHookHelper {
         //把Handler的mCallback字段，替换为new MockClass2(mH)
         RefInvoke.setFieldObject("android.os.Handler", mH, "mCallback", new MockClass2(mH));
     }
+
+    public static void hookInstrumentation() {
+        // 先获取到当前的ActivityThread对象
+        Object currentActivityThread = RefInvoke.getFieldObject("android.app.ActivityThread", null,"sCurrentActivityThread");
+
+        // 拿到原始的 mInstrumentation字段
+        Instrumentation mInstrumentation = (Instrumentation) RefInvoke.getFieldObject(currentActivityThread.getClass(), currentActivityThread, "mInstrumentation");
+
+        // 创建代理对象
+        Instrumentation evilInstrumentation = new EvilInstrumentation(mInstrumentation);
+
+        // 偷梁换柱
+        RefInvoke.setFieldObject(currentActivityThread.getClass(), currentActivityThread, "mInstrumentation", evilInstrumentation);
+    }
+
 }

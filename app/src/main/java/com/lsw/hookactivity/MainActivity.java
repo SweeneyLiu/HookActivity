@@ -16,7 +16,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        AMSHookHelper.hookActivityThread();
+//        AMSHookHelper.hookActivityThread();
+        AMSHookHelper.hookInstrumentation();
         super.attachBaseContext(newBase);
     }
 
